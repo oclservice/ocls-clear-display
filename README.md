@@ -11,6 +11,12 @@ Once enabled, electronic resources in your catalog should look like this:
 ### How to enable the module
 
 To enable this module, download this repository inside the `js` folder at the root of your view directory
-and add something like this to your `custom.js` (or `main.js`) file.
+and add something like this to your `custom.js` (or `main.js`) file:
+
+```
+import './ocls-clear-display';
+
+var app = angular.module('viewCustom', ['angularLoad', 'oclsClearDisplay']);
+```
 
 You will also need to add the CSS snippet included to your `custom.css` file.
