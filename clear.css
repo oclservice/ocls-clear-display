@@ -1,0 +1,30 @@
+/* OCLS CLEAR display */
+
+.ocls-clear-display dl{
+  display: inline-flex;
+  margin:0;
+  font-style:normal;
+  white-space: nowrap;
+  color: #3a3a3a;
+  flex-wrap:wrap;
+}
+
+.ocls-clear-display dl dd {
+  margin:0 5px 0 5px;
+  padding: 0 5px 0 5px;
+}
+
+.ocls-clear-term-Yes {
+    background-color:green;
+    color:white;
+}
+
+.ocls-clear-term-No {
+    background-color:red;
+    color:white;
+}
+
+.ocls-clear-term-Ask {
+    background-color:orange;
+    color:white;
+}
