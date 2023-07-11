@@ -37,10 +37,6 @@ angular
         }])
     .controller('oclsClearDisplayController', ['$scope', 'oclsClearService', function ($scope, oclsClearService) {
         
-        function addPermissionsObject(term,value,termText,valueText){
-            return '<dt title="' + termText + '">' + term + '</dt><dd class="ocls-clear-term-' + value + '" title="' + valueText + '">' + value + '</dd>';
-        };
-        
         var vm = this;
         this.$onInit = function() {
             $scope.$watch(
@@ -67,6 +63,7 @@ angular
 
                             if (clearLinks){
                                 
+                                // Remove public note
                                 services[i].publicNote = '';
                                 
                                 clearLinks.forEach(function(foundLink){
@@ -82,30 +79,29 @@ angular
                                             if (!data)return;
                                             // The data variable contains the license information as a JSON object.
                                             console.log(data);
-                                            // Replace the public note content with a summary display of this information
-                                            let permissionsOutput = '<div class="ocls-clear-display"><a href="' + clearBaseUrl + clearResourceName + '" target="_blank">Permitted uses (hover for details or click for more info):<dl>';
-                                            if (data.license.e_reserves){
-                                                permissionsOutput += addPermissionsObject('E-Reserve?',data.license.e_reserves.usage, data.license.e_reserves.case, data.license.e_reserves['definition-short']);
+                                            
+                                            // Build array of usage terms
+                                            let usageTerms = ["<b>Usage rights (hover on answers for details):</b>"];
+                                            
+                                            let lineCounter = 1;
+                                            for(let permissionKey in data.license) {
+                                                if (permissionKey != 'license-name') {
+                                                    let permissionLine = '<div class="ocls-clear-display"><div class="ocls-clear-term'
+                                                        + (lineCounter % 2 == 0 ? ' ocls-clear-odd' : '') + '">'
+                                                         + data.license[permissionKey].case + '</div><div class="ocls-clear-value ocls-clear-' 
+                                                         + data.license[permissionKey].usage + '" title="' 
+                                                         + data.license[permissionKey]['definition-short'] + '">' 
+                                                    + data.license[permissionKey].usage + '</div></div>';
+                                                    usageTerms.push(permissionLine);
+                                                    lineCounter++;
+                                                }
                                             }
-                                            if (data.license.cms){
-                                               permissionsOutput = permissionsOutput +
-                                                addPermissionsObject('Blackboard?',data.license.cms.usage,data.license.cms.case,data.license.cms['definition-short']);
-                                            }
-                                            if (data.license.course_pack){
-                                               permissionsOutput = permissionsOutput +
-                                                addPermissionsObject('Course packs?',data.license.course_pack.usage,data.license.course_pack.case,data.license.course_pack['definition-short']);
-                                            }
-                                            if (data.license.durable_url){
-                                               permissionsOutput = permissionsOutput +
-                                                addPermissionsObject('Link?',data.license.durable_url.usage,data.license.durable_url.case,data.license.durable_url['definition-short']);
-                                            }
-                                            /*if (data.license.ill_print){
-                                               permissionsOutput = permissionsOutput +
-                                                addPermissionsObject('ILL?',data.license.ill_print.usage,data.license.ill_print.case,data.license.ill_print['definition-short']);
-                                            }*/
-                                            permissionsOutput = permissionsOutput + '</dl></a></div>';
-                                            services[i].publicNote = services[i].publicNote + permissionsOutput;
-                                        
+                                            
+                                            usageTerms.push('<a href="' + clearBaseUrl + clearResourceName + '" target="_blank">More information</a>');
+                                            
+                                            // Hijack the built-in license terms display function to add CLEAR terms
+                                            services[i].licenceExist = "true";
+                                            services[i].licence = usageTerms;                                    
                                         
                                         }
                                         catch(e){
