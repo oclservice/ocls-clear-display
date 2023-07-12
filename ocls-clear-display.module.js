@@ -4,9 +4,11 @@
 // and display a summary underneath each service.
 
 import X2JS from 'x2js';
+import {oclsClearDisplayConfig} from './ocls-clear-display.config.js';
 
 angular
     .module('oclsClearDisplay', [])
+    .factory('oclsClearDisplayConfig', oclsClearDisplayConfig)
     .factory('oclsClearService', ['$http', '$sce',function($http, $sce){
         function fetchOurData(baseUrl,resourceName,locationIndex){
             let url = baseUrl + 'api/?tag=' + resourceName;
@@ -53,6 +55,7 @@ angular
                         console.log('OCLS CLEAR display start');
                         
                         var services = vm.parentCtrl.services;
+                        var config = oclsClearDisplayConfig;
                         
                         // Go through the list of available services and look for OUR/CLEAR URLs
                         for(let i = 0; i < services.length; i++){
@@ -81,27 +84,43 @@ angular
                                             console.log(data);
                                             
                                             // Build array of usage terms
-                                            let usageTerms = ["<b>Usage rights (hover on answers for details):</b>"];
+                                            let usageTerms = [config.title_text];
                                             
                                             let lineCounter = 1;
                                             for(let permissionKey in data.license) {
-                                                if (permissionKey != 'license-name') {
+                                                if ((permissionKey != 'license-name') && (!oclsClearDisplayConfig.terms[permissionKey].hide)) {
                                                     let permissionLine = '<div class="ocls-clear-display"><div class="ocls-clear-term'
-                                                        + (lineCounter % 2 == 0 ? ' ocls-clear-odd' : '') + '">'
-                                                         + data.license[permissionKey].case + '</div><div class="ocls-clear-value ocls-clear-' 
-                                                         + data.license[permissionKey].usage + '" title="' 
-                                                         + data.license[permissionKey]['definition-short'] + '">' 
-                                                    + data.license[permissionKey].usage + '</div></div>';
+                                                        + (lineCounter % 2 == 0 ? ' ocls-clear-odd' : '')
+                                                        + '"' 
+                                                        + ((config.hover_text && config.compact_display) ? ' title="'+ data.license[permissionKey].case + '"' : '')
+                                                        + '>'
+                                                        + (config.compact_display ? config.terms[permissionKey].short_text : data.license[permissionKey].case) 
+                                                        + '</div><div class="ocls-clear-value ocls-clear-' 
+                                                        + data.license[permissionKey].usage + '"'
+                                                        + (config.hover_text ? ' title="'+ data.license[permissionKey]['definition-short'] + '"' : '')
+                                                        + '>' 
+                                                        + data.license[permissionKey].usage + '</div></div>';
                                                     usageTerms.push(permissionLine);
                                                     lineCounter++;
                                                 }
                                             }
                                             
-                                            usageTerms.push('<a href="' + clearBaseUrl + clearResourceName + '" target="_blank">More information</a>');
+                                            if (angular.isDefined(config.footer_text)){
+                                                usageTerms.push('<a href="' + clearBaseUrl + clearResourceName + '" target="_blank">' + config.footer_text + '</a>');
+                                            }
                                             
-                                            // Hijack the built-in license terms display function to add CLEAR terms
-                                            services[i].licenceExist = "true";
-                                            services[i].licence = usageTerms;                                    
+                                            
+                                            // If desired by the college, display the license terms inside the public note field
+                                            // wrapped in a link to the CLEAR record (to suppress the existing click behaviour)
+                                            if (config.display_in_note){
+                                                services[i].publicNote = '<a href="' + clearBaseUrl + clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
+                                                
+                                            }
+                                            else {
+                                                // Otherwise, hijack the built-in license terms display function to add CLEAR terms
+                                                services[i].licenceExist = "true";
+                                                services[i].licence = usageTerms;  
+                                            }                                 
                                         
                                         }
                                         catch(e){
