@@ -89,14 +89,19 @@ angular
                                             let lineCounter = 1;
                                             for(let permissionKey in data.license) {
                                                 if ((permissionKey != 'license-name') && (!oclsClearDisplayConfig.terms[permissionKey].hide)) {
-                                                    let permissionLine = '<div class="ocls-clear-display"><div class="ocls-clear-term'
+                                                    let permissionLine = '<div class="ocls-clear-display'
+                                                        + (config.compact_display ? ' ocls-clear-compact' : '') 
+                                                        +'"><div class="ocls-clear-term'
                                                         + (lineCounter % 2 == 0 ? ' ocls-clear-odd' : '')
+                                                        + (config.compact_display ? ' ocls-clear-compact' : '') 
                                                         + '"' 
                                                         + ((config.hover_text && config.compact_display) ? ' title="'+ data.license[permissionKey].case + '"' : '')
                                                         + '>'
                                                         + (config.compact_display ? config.terms[permissionKey].short_text : data.license[permissionKey].case) 
                                                         + '</div><div class="ocls-clear-value ocls-clear-' 
-                                                        + data.license[permissionKey].usage + '"'
+                                                        + data.license[permissionKey].usage
+                                                        + (config.compact_display ? ' ocls-clear-compact' : '')  
+                                                        + '"'
                                                         + (config.hover_text ? ' title="'+ data.license[permissionKey]['definition-short'] + '"' : '')
                                                         + '>' 
                                                         + data.license[permissionKey].usage + '</div></div>';
