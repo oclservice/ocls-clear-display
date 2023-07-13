@@ -11,10 +11,19 @@ Alternatively, you can opt for a shorter format and display it directly undernea
 
 ![Screenshot of the permitted uses module enabled on the Primo interface](clear-display-compact-screenshot.png)
 
+### How it works
+
+This module works by identifying links to CLEAR/OUR records provided in the Public Note for a collection. More specifically,
+it is looking for URLs with the format `https://<clear or ocul>.scholarsportal.info/<institution>/<product>`. For each link
+like this, the module then sends a request to the CLEAR/OUR API for that record and displays the response visually on Primo.
+
 ### How to enable the module
 
-To enable this module, download this repository inside the `js` folder at the root of your view directory
-and add something like this to your `custom.js` (or `main.js`) file:
+#### Using the Primo development environment
+
+If you are using the [Primo VE development environment](https://github.com/ExLibrisGroup/primo-explore-devenv),
+you can download this repository inside the `js` folder at the root of your view directory
+and add something like this to your `main.js` file:
 
 ```JavaScript
 import './ocls-clear-display/ocls-clear-display.module.js';
@@ -25,7 +34,14 @@ var app = angular.module('viewCustom', ['angularLoad', 'oclsClearDisplay']);
 Make sure that both `ocls-clear-display.module.js` and `ocls-clear-display.config.js` are inside the same repository or
 the module will not work.
 
-You will also need to add the CSS snippet included to your `custom.css` file.
+#### Manually editing your view directory
+
+If you are editing the files in your view directory but not using the development environment, I'm still working out
+how to make it work... :(
+
+#### CSS
+
+You will also need to add [the CSS snippet included](clear.css) to your `custom.css` file.
 
 ### Custom settings
 
