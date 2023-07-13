@@ -7,6 +7,10 @@ Once enabled, electronic resources in your catalog should look like this:
 
 ![Screenshot of the permitted uses module enabled on the Primo interface](clear-display-screenshot.png)
 
+Alternatively, you can opt for a shorter format and display it directly underneath each View It item (inside the Public Note field):
+
+![Screenshot of the permitted uses module enabled on the Primo interface](clear-display-compact-screenshot.png)
+
 ### How to enable the module
 
 To enable this module, download this repository inside the `js` folder at the root of your view directory
@@ -37,3 +41,6 @@ Variable | Effect
 `terms` | A dictionary of objects for each permission term supplied by CLEAR/OUR. For each term, you can define the following two variables:
 `short_text`| Set this value to the short text you want to display when using the `compact_display` mode (see above).
 `hide` | Set this to true if you want to hide a particular term from the display.
+
+The text of the "Show License"/"Hide License" button can be customized in the ViewIt Labels table within the Alma backend. Alter the description
+for the following codes: `c.uresolver.viewit.license.show_license` and `c.uresolver.viewit.license.hide_license`.
