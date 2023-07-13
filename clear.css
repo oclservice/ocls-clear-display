@@ -30,16 +30,16 @@
     }
 
     .ocls-clear-Yes {
-        background-color:green;
-        color:white;
+        background-color: #e7f4e4;
+        color: #212121;
     }
 
     .ocls-clear-No {
-        background-color:red;
-        color:white;
+        background-color: #f9dede;
+        color: #212121;
     }
 
     .ocls-clear-Ask {
-        background-color:orange;
-        color:white;
+        background-color: #fff1d2;
+        color: #212121;
     }
