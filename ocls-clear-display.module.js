@@ -52,17 +52,16 @@ angular
                 function () {
                     // This listener function is called both during initial run and whenever the watched variable changes.
                     if (angular.isDefined(vm.parentCtrl.services)){
-                        console.log('OCLS CLEAR display start');
+                        //console.log('OCLS CLEAR display start');
                         
                         var services = vm.parentCtrl.services;
                         var config = oclsClearDisplayConfig;
                         
                         // Go through the list of available services and look for OUR/CLEAR URLs
                         for(let i = 0; i < services.length; i++){
-                            console.log(i);
-                            console.log(services[i]);
+                            
                             var clearLinks = services[i].publicNote.match(/([^"]+\.scholarsportal\.info\/[^"]+)/g);
-                            console.log(clearLinks);
+                            
 
                             if (clearLinks){
                                 
@@ -70,18 +69,18 @@ angular
                                 services[i].publicNote = '';
                                 
                                 clearLinks.forEach(function(foundLink){
-                                    console.log('Found CLEAR link');
+                                    //console.log('Found CLEAR link');
                                     let clearLink = foundLink.match(/(.+\.scholarsportal\.info\/[^"]+\/)(.+)/);
                                     let clearBaseUrl = clearLink[1];
-                                    console.log(clearBaseUrl);
+                                    
                                     let clearResourceName = clearLink[2];
-                                    console.log(clearResourceName);
+                                    
                                     oclsClearService.fetchOurData(clearBaseUrl,clearResourceName,i)
                                     .then((data) => {
                                         try{
                                             if (!data)return;
                                             // The data variable contains the license information as a JSON object.
-                                            console.log(data);
+                                            //console.log(data);
                                             
                                             // Build array of usage terms
                                             let usageTerms = [config.title_text];
