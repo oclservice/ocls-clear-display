@@ -60,8 +60,7 @@ angular
                         // Go through the list of available services and look for OUR/CLEAR URLs
                         for(let i = 0; i < services.length; i++){
                             
-                            var clearLinks = services[i].publicNote.match(/([^"]+\.scholarsportal\.info\/[^"]+)/g);
-                            
+                            var clearLinks = services[i].publicNote.match(/(https?:\/\/(clear|ocul)\.scholarsportal\.info\/[^"]+)/g);
 
                             if (clearLinks){
                                 
@@ -70,10 +69,11 @@ angular
                                 
                                 clearLinks.forEach(function(foundLink){
                                     //console.log('Found CLEAR link');
-                                    let clearLink = foundLink.match(/(.+\.scholarsportal\.info\/[^"]+\/)(.+)/);
+                                    let clearLink = foundLink.match(/(https?:\/\/(clear|ocul)\.scholarsportal\.info\/[^"]+\/)(.+)/);
+                                    
                                     let clearBaseUrl = clearLink[1];
                                     
-                                    let clearResourceName = clearLink[2];
+                                    let clearResourceName = clearLink[3];
                                     
                                     oclsClearService.fetchOurData(clearBaseUrl,clearResourceName,i)
                                     .then((data) => {
