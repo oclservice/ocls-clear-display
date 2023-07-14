@@ -14,7 +14,13 @@ Alternatively, you can opt for a shorter format and display it directly undernea
 ## How it works
 
 This module works by identifying links to CLEAR/OUR records provided in the Public Note for a collection. More specifically,
-it is looking for URLs with the format `https://<clear or ocul>.scholarsportal.info/<institution>/<product>`. For each link
+it is looking for URLs with the format 
+
+```
+https://<clear|ocul>.scholarsportal.info/<institution>/<product>
+```
+
+For each link
 like this, the module then sends a request to the CLEAR/OUR API for that record and displays the response visually on Primo.
 
 ## How to enable the module
@@ -36,18 +42,30 @@ var app = angular.module('viewCustom', ['angularLoad', 'oclsClearDisplay']);
 If you are editing the files in your view directory but not using the development environment, you can also copy
 the content of [`ocls-clear-display.module.js`](`ocls-clear-display.module.js`) to your `custom.js` file.
 
-Then, make sure to add the `oclsClearDisplay` to your module definition (you may already have other modules on this line,
-just add this one at the end):
+Make sure to add this content *after* the following lines
+
+```JavaScript
+(function () {
+  'use strict';
+  'use strict';
+  
+  /* Paste the module contents here */
+```
+
+and *before* the one that looks like this
 
 ```JavaScript
 var app = angular.module('viewCustom', ['angularLoad', 'oclsClearDisplay']);
 ```
 
-Make sure to paste the contents of the module *before* the line that starts with `var app = angular.module`.
+Then, make sure to add `'oclsClearDisplay'` inside the module definition on that line. You may already have other modules
+referenced there, just add this one to the list.
+
 
 ### CSS
 
-You will also need to add [the CSS snippet included](clear.css) to your `custom.css` file.
+You will also need to add [the CSS snippet included](clear.css) to your `custom.css` file. You can customize it to vary
+colours, text size, etc.
 
 ## Custom settings
 
