@@ -40,7 +40,7 @@ var app = angular.module('viewCustom', ['angularLoad', 'oclsClearDisplay']);
 ### Manually editing your view directory
 
 If you are editing the files in your view directory but not using the development environment, you can also copy
-the content of [`ocls-clear-display.module.js`](`ocls-clear-display.module.js`) to your `custom.js` file.
+the content of [`ocls-clear-display.module.js`](ocls-clear-display.module.js) to your `custom.js` file.
 
 Make sure to add this content *after* the following lines
 
