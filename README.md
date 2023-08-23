@@ -92,7 +92,7 @@ for the following codes: `c.uresolver.viewit.license.show_license` and `c.uresol
 
 ## Credits
 
-This module was inspired by the University of Guelph OUR integration code. 
+This module was inspired by the [University of Guelph OUR integration code](https://gitlab.com/ug-library/primo-explore-ocul-docker). 
 
 The functions to convert XML to JSON included in this module were inspired by 
 [this snippet by Visnu Pitiyanuvath](https://observablehq.com/@visnup/xml-to-json).
