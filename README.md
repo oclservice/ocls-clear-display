@@ -4,7 +4,8 @@ This is module dynamically replaces hyperlinks to permitted uses records managed
 the [OCUL Usage Rights (OUR) service](https://learn.scholarsportal.info/all-guides/our/)
 (rebranded as CLEAR for Ontario colleges) with a visual summary.
 
-Once enabled, electronic resources in your catalog should look like this:
+Once enabled, permitted uses information pulled from CLEAR/OUR are displayed within Primo's "Show License"
+toggle for each electronic resource referenced in CLEAR/OUR:
 
 ![Screenshot of the permitted uses module enabled on the Primo interface](clear-display-screenshot.png)
 
@@ -23,6 +24,9 @@ https://<clear|ocul>.scholarsportal.info/<institution>/<product>
 
 For each link
 like this, the module then sends a request to the CLEAR/OUR API for that record and displays the response visually on Primo.
+
+If you opt for the default display (inside the Primo "Show License" toggle), the information pulled from CLEAR/OUR **replaces**
+any permitted uses information provided by the Alma record.
 
 ## How to enable the module
 
