@@ -81,8 +81,6 @@ of at least 4.5:1 as per [WCAG 2.0](https://www.w3.org/WAI/WCAG21/quickref/?vers
 * "No": #212121 on #f9dede (contrast ratio 12.7:1)
 * "Ask": #212121 on #fff1d2 (contrast ratio 14.4:1)
 
-The above values come from the [Carnegie Museum of Pittsburgh Web Accessibility Guidelines](http://web-accessibility.carnegiemuseums.org/design/color/) colour palette.
-
 ## Custom settings
 
 Edit the contents of `oclsClearDisplayConfig` according to your needs:
@@ -107,3 +105,5 @@ This module was inspired by the [University of Guelph OUR integration code](http
 
 The functions to convert XML to JSON included in this module were inspired by 
 [this snippet by Visnu Pitiyanuvath](https://observablehq.com/@visnup/xml-to-json).
+
+Colour values in the provided CSS come from the [Carnegie Museum of Pittsburgh Web Accessibility Guidelines colour palette](http://web-accessibility.carnegiemuseums.org/design/color/).
