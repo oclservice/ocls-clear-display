@@ -72,6 +72,17 @@ referenced there, just add this one to the list.
 You will also need to add [the CSS snippet included](clear.css) to your `custom.css` file. You can customize it to vary
 colours, text size, etc.
 
+#### A note on accessibility
+
+The colours of the text and background for the "Yes/No/Ask" boxes in the provided CSS were chosen to have a contrast ratio
+of at least 4.5:1 as per [WCAG 2.0](https://www.w3.org/WAI/WCAG21/quickref/?versions=2.0#contrast-minimum):
+
+* "Yes": #212121 on #e7f4e4 (contrast ratio 14.2:1)
+* "No": #212121 on #f9dede (contrast ratio 12.7:1)
+* "Ask": #212121 on #fff1d2 (contrast ratio 14.4:1)
+
+The above values come from the [Carnegie Museum of Pittsburgh Web Accessibility Guidelines](http://web-accessibility.carnegiemuseums.org/design/color/) colour palette.
+
 ## Custom settings
 
 Edit the contents of `oclsClearDisplayConfig` according to your needs:
