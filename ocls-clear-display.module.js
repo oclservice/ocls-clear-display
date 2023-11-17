@@ -230,10 +230,10 @@ angular
                                                 // wrapped in a link to the CLEAR record (to suppress the existing click behaviour)
                                                 if (config.display_in_note){
                                                     services[i].publicNote = '<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
-
-                                                    // Append what remains of the original note to the end, unless it's only empty HTML tags
-                                                    if (originalNote.match(/(?<=>)[\w\s]+(?=<)/)) {
-                                                        services[i].publicNote = services[i].publicNote + originalNote;
+                                                    
+                                                    // Prepend what remains of the original note to the permitted uses info, unless it's only empty HTML tags
+                                                    if (originalNote.match(/>([^<]*)</)[1]) {
+                                                        services[i].publicNote = originalNote + services[i].publicNote;
                                                     }
                                                 }
                                                 else {
