@@ -12,6 +12,7 @@ const oclsClearDisplayConfig = {
         hover_text : true,
         display_in_note : false,
         title_text: '<b>Usage rights (hover on answer for details):</b>',
+        local_instance: '',
         footer_text: 'More information',
         terms: {
             cms: {
@@ -102,7 +103,14 @@ function domToJSON(node) {
 function xml2json(xml) {
     const parser = new DOMParser();
     xml = parser.parseFromString(xml, "application/xml");
-    return domToJSON(xml);
+    const errorNode = xml.querySelector('parsererror');
+    if (errorNode) {
+        // parsing failed
+        return null;
+    } else {
+        // parsing succeeded
+        return domToJSON(xml);
+    }
 }
 
 // Main CLEAR display module
