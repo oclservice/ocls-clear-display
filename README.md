@@ -92,12 +92,25 @@ Property | Effect
 `display_in_note` | When set to `true`, the permitted uses are displayed inside the Primo Public Note for each database. When omitted or set to `false`, permitted uses obtained from CLEAR/OUR instead replace the built-in Primo terms display and the user can display them by clicking the "Show Licence" button. Note that when `display_in_note` is enabled, permitted uses are **always displayed** (no user click required).
 `title_text` | Defines what text is to be displayed above the permitted uses table. This value can contain basic HTML tags to control appearance.
 `footer_text` | Defines what text is to be displayed underneath the permitted uses table. When `display_in_note` is not enabled, this text is wrapped with a hyperlink to the full CLEAR/OUR record.
+`local_instance` | This value can be set to a custom OUR instance name to **override** the one in the original URL. See note below regarding CLEAR Local override.
 `terms` | A dictionary of objects for each permission term supplied by CLEAR/OUR. For each term, you can define the following two properties:
 `short_text`| Set this value to the short text you want to display when using the `compact_display` mode (see above).
 `hide` | Set this to true if you want to hide a particular term from the display.
 
 The text of the "Show License"/"Hide License" button can be customized in the ViewIt Labels table within the Alma backend. Alter the description
 for the following codes: `c.uresolver.viewit.license.show_license` and `c.uresolver.viewit.license.hide_license`.
+
+### CLEAR Local override
+
+In the case of the Ontario colleges, CLEAR URLs are provided by OCLS for all consortial resources. Colleges who have opted to use the CLEAR Local service,
+can in addition manage their own CLEAR instance and add their own URLs to local resources in their Institution Zone. However, the URLs provided by OCLS on
+consortial resources will retrieve CLEAR Central records for those resources, while CLEAR Local colleges may want their own records to be displayed instead.
+
+This can be achieved by setting the `local_instance` variable in the configuration array to the name of their instance. Setting this variable will
+**override** the instance name in **all** CLEAR links found by the module.
+
+Note that currently there is no fallback to this override method. If no CLEAR Local record exists for a resource, permitted uses will not be displayed,
+even if a CLEAR Central record exists!
 
 ## Credits
 
