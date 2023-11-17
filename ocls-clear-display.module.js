@@ -160,22 +160,26 @@ angular
                         for(let i = 0; i < services.length; i++){
                             
                             if (angular.isDefined(services[i].publicNote)){
-                                var clearLinks = services[i].publicNote.match(/(https?:\/\/(clear|ocul)\.scholarsportal\.info\/[^"]+)/g);
-
+                                var clearLinks = [...services[i].publicNote.matchAll(/<a +href="(https?:\/\/(clear|ocul)\.scholarsportal\.info)\/([^"]+)\/(.+?)".*?<\/a>/g)];
+                                
                                 if (clearLinks){
-                                
-                                    // Remove public note
-                                    services[i].publicNote = '';
-                                
+                                    
+                                    let originalNote = services[i].publicNote;
+
                                     clearLinks.forEach(function(foundLink){
-                                        //console.log('Found CLEAR link');
-                                        let clearLink = foundLink.match(/(https?:\/\/(clear|ocul)\.scholarsportal\.info\/[^"]+\/)(.+)/);
-                                        //console.log(clearLink);
-                                        let clearBaseUrl = clearLink[1];
-                                    
-                                        let clearResourceName = clearLink[3];
-                                    
-                                        oclsClearService.fetchOurData(clearBaseUrl,clearResourceName,i)
+                                        
+                                        // Remove the found link from the note
+                                        originalNote = originalNote.replace(foundLink[0],'');
+                                        
+                                        let clearBaseUrl = foundLink[1];
+                                        let clearInstanceName = foundLink[3];
+                                        let clearResourceName = foundLink[4];
+                                        
+                                        if (config.local_instance){
+                                            clearInstanceName = config.local_instance;
+                                        }
+                                
+                                        oclsClearService.fetchOurData(clearBaseUrl+'/'+clearInstanceName+'/',clearResourceName,i)
                                         .then((data) => {
                                             try{
                                                 if (!data)return;
@@ -211,15 +215,18 @@ angular
                                                 }
                                             
                                                 if (angular.isDefined(config.footer_text)){
-                                                    usageTerms.push('<a href="' + clearBaseUrl + clearResourceName + '" target="_blank">' + config.footer_text + '</a>');
+                                                    usageTerms.push('<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + config.footer_text + '</a>');
                                                 }
-                                            
-                                            
+                                                
                                                 // If desired by the college, display the license terms inside the public note field
                                                 // wrapped in a link to the CLEAR record (to suppress the existing click behaviour)
                                                 if (config.display_in_note){
-                                                    services[i].publicNote = '<a href="' + clearBaseUrl + clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
-                                                
+                                                    services[i].publicNote = '<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
+
+                                                    // Append what remains of the original note to the end, unless it's only empty HTML tags
+                                                    if (originalNote.match(/(?<=>)[\w\s]+(?=<)/)) {
+                                                        services[i].publicNote = services[i].publicNote + originalNote;
+                                                    }
                                                 }
                                                 else {
                                                     // Otherwise, hijack the built-in license terms display function to add CLEAR terms
@@ -234,17 +241,10 @@ angular
                                             }
                                         })
                                         }
-                                    
                                     )
-                                
                                 }
-                                
                             }
-                            
-                            
-                            
                         }
-                         
                     }
                 }
             );
