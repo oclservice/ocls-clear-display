@@ -226,15 +226,18 @@ angular
                                                     usageTerms.push('<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + config.footer_text + '</a>');
                                                 }
                                                 
+                                                // Edit the public note field to display everything but processed permitted uses links,
+                                                // unless it's only empty HTML tags.
+                                                if (angular.element(originalNote).text()) {
+                                                    services[i].publicNote = originalNote;
+                                                }
+                                                else {
+                                                    services[i].publicNote = '';
+                                                }
                                                 // If desired by the college, display the license terms inside the public note field
                                                 // wrapped in a link to the CLEAR record (to suppress the existing click behaviour)
                                                 if (config.display_in_note){
-                                                    services[i].publicNote = '<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
-                                                    
-                                                    // Prepend what remains of the original note to the permitted uses info, unless it's only empty HTML tags
-                                                    if (originalNote.match(/>([^<]*)</)[1]) {
-                                                        services[i].publicNote = originalNote + services[i].publicNote;
-                                                    }
+                                                    services[i].publicNote = services[i].publicNote + '<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
                                                 }
                                                 else {
                                                     // Otherwise, hijack the built-in license terms display function to add CLEAR terms
