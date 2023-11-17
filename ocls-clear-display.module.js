@@ -119,15 +119,36 @@ angular
     .module('oclsClearDisplay', [])
     .factory('oclsClearDisplayConfig', oclsClearDisplayConfig)
     .factory('oclsClearService', ['$http', '$sce',function($http, $sce){
-        function fetchOurData(baseUrl,resourceName,locationIndex){
-            let url = baseUrl + 'api/?tag=' + resourceName;
+        function fetchOurData(baseUrl,resourceName,instanceOriginal,instanceOverride = ''){
+            
+            let instance = instanceOriginal;
+            
+            if (instanceOverride){
+                instance = instanceOverride;
+            }
+       
+            let url = baseUrl + '/' + instance + '/api/?tag=' + resourceName;
+            let publicUrl = baseUrl + '/' + instance + '/' + resourceName;
             
             $sce.trustAsResourceUrl(url);
 
             return $http.get(url)
                 .then(
                     function(response){
-                        return xml2json(response.data);
+                        let parsedResult = xml2json(response.data);
+                        if (parsedResult){
+                            // A valid result has been returned by the API, pass it on.
+                            parsedResult.url = publicUrl;
+                            return parsedResult;
+                        }
+                        else if (instanceOverride){
+                            // No valid result has been returned for the overriden instance. Try with the original instance instead (recursion).
+                            return fetchOurData(baseUrl,resourceName,instanceOriginal);
+                        }
+                        else {
+                            // No valid result has been returned.
+                            return null
+                        }
                     },
                     function(httpError){
                         if (httpError.status === 404)return null;
@@ -182,12 +203,8 @@ angular
                                         let clearBaseUrl = foundLink[1];
                                         let clearInstanceName = foundLink[3];
                                         let clearResourceName = foundLink[4];
-                                        
-                                        if (config.local_instance){
-                                            clearInstanceName = config.local_instance;
-                                        }
                                 
-                                        oclsClearService.fetchOurData(clearBaseUrl+'/'+clearInstanceName+'/',clearResourceName,i)
+                                        oclsClearService.fetchOurData(clearBaseUrl,clearResourceName,clearInstanceName,config.local_instance)
                                         .then((data) => {
                                             try{
                                                 if (!data)return;
@@ -223,13 +240,16 @@ angular
                                                 }
                                             
                                                 if (angular.isDefined(config.footer_text)){
-                                                    usageTerms.push('<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + config.footer_text + '</a>');
+                                                    usageTerms.push('<a href="' + data.url + '" target="_blank">' + config.footer_text + '</a>');
                                                 }
                                                 
                                                 // Edit the public note field to display everything but processed permitted uses links,
                                                 // unless it's only empty HTML tags.
                                                 if (angular.element(originalNote).text()) {
-                                                    services[i].publicNote = originalNote;
+                                                    // Remove empty HTML tags using jQuery
+                                                    let cleanNote = angular.element('<span>' + originalNote + '</span>');
+                                                    cleanNote.find(':empty').remove();
+                                                    services[i].publicNote = cleanNote.html();
                                                 }
                                                 else {
                                                     services[i].publicNote = '';
@@ -237,7 +257,7 @@ angular
                                                 // If desired by the college, display the license terms inside the public note field
                                                 // wrapped in a link to the CLEAR record (to suppress the existing click behaviour)
                                                 if (config.display_in_note){
-                                                    services[i].publicNote = services[i].publicNote + '<a href="' + clearBaseUrl +'/'+clearInstanceName+'/'+ clearResourceName + '" target="_blank">' + usageTerms.join('') + '</a>';
+                                                    services[i].publicNote = services[i].publicNote + '<a href="' + data.url + '" target="_blank">' + usageTerms.join('') + '</a>';
                                                 }
                                                 else {
                                                     // Otherwise, hijack the built-in license terms display function to add CLEAR terms
