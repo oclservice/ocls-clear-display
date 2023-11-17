@@ -107,10 +107,10 @@ can in addition manage their own CLEAR instance and add their own URLs to local 
 consortial resources will retrieve CLEAR Central records for those resources, while CLEAR Local colleges may want their own records to be displayed instead.
 
 This can be achieved by setting the `local_instance` variable in the configuration array to the name of their instance. Setting this variable will
-**override** the instance name in **all** CLEAR links found by the module.
+**override** the instance name in **all** CLEAR links found by the module, falling back to the linked instance if unsuccessful.
 
-Note that currently there is no fallback to this override method. If no CLEAR Local record exists for a resource, permitted uses will not be displayed,
-even if a CLEAR Central record exists!
+In other words, if a CLEAR Local record exists, it will be displayed instead of the CLEAR Central record. If no CLEAR Local record exists for that resource,
+the CLEAR Central record will be used instead.
 
 ## Credits
 
