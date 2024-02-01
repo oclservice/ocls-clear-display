@@ -137,8 +137,8 @@ angular
                     function(response){
                         let parsedResult = xml2json(response.data);
                         if (parsedResult){
-                            // A valid result has been returned by the API, pass it on.
-                            parsedResult.url = publicUrl;
+                            // A valid result has been returned by the API, pass it on (forcing HTTPS).
+                            parsedResult.url = publicUrl.replace('http://','https://');
                             return parsedResult;
                         }
                         else if (instanceOverride){
@@ -193,7 +193,8 @@ angular
                                 
                                 if (clearLinks){
                                     
-                                    let originalNote = services[i].publicNote;
+                                    // Wrap the original note content in HTML elements so DOM selectors can be used on it later.
+                                    let originalNote = '<div>' + services[i].publicNote + '</div>';
 
                                     clearLinks.forEach(function(foundLink){
                                         
