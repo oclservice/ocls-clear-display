@@ -127,8 +127,8 @@ angular
                 instance = instanceOverride;
             }
        
-            let url = baseUrl + '/' + instance + '/api/?tag=' + resourceName;
-            let publicUrl = baseUrl + '/' + instance + '/' + resourceName;
+            let url = baseUrl.replace('http://','https://') + '/' + instance + '/api/?tag=' + resourceName;
+            let publicUrl = baseUrl.replace('http://','https://') + '/' + instance + '/' + resourceName;
             
             $sce.trustAsResourceUrl(url);
 
@@ -137,8 +137,8 @@ angular
                     function(response){
                         let parsedResult = xml2json(response.data);
                         if (parsedResult){
-                            // A valid result has been returned by the API, pass it on (forcing HTTPS).
-                            parsedResult.url = publicUrl.replace('http://','https://');
+                            // A valid result has been returned by the API, pass it on.
+                            parsedResult.url = publicUrl;
                             return parsedResult;
                         }
                         else if (instanceOverride){
